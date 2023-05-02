@@ -1,9 +1,13 @@
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 class Categories:
     def __init__(self):
-        self.menu_keyboard = InlineKeyboardMarkup()
-        self.category1 = InlineKeyboardButton('Библиотека', callback_data='category1')
-        self.category2 = InlineKeyboardButton('Помощь в выборе языка', callback_data='category2')
-        self.category3 = InlineKeyboardButton('Изучение языка программирования', callback_data='category3')
-        self.menu_keyboard.add(self.category1, self.category2, self.category3)
+        pass
+
+    def menu_keyboard_with_subcategories(self):
+        keyboard = InlineKeyboardMarkup()
+        button_library = InlineKeyboardButton("Библиотека", callback_data='category_library')
+        button_roadmaps = InlineKeyboardButton("Помощь в выборе языка", callback_data='category_roadmaps')
+        button_chat = InlineKeyboardButton("Изучение языка", callback_data='category_chat')
+        keyboard.add(button_library, button_roadmaps, button_chat)
+        return keyboard
