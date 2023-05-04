@@ -9,7 +9,6 @@ from categories import Categories
 from roadmaps import RoadmapSelection
 from chat import ChatGPT
 from database.database import Database
-import sqlite3
 
 load_dotenv()
 
@@ -22,6 +21,7 @@ class TelegramBot:
         self.roadmap_selection = RoadmapSelection()
         self.openai_api_key = os.environ['CHATGPT_API_TOKEN']
         self.chat_gpt = ChatGPT(bot_token=self.bot_token, loop=loop)
+        
         self.db = Database('database/users.db') 
 
         # Initialize session variable to keep track of logged in users
@@ -39,18 +39,18 @@ class TelegramBot:
         @self.dp.message_handler(lambda message: message.text == 'Войти')
         async def login_handler(message: types.Message):
             user_id = message.from_user.id
-            self.cursor.execute("SELECT * FROM users WHERE id=?", (user_id,))
-            existing_user = self.cursor.fetchone()
+            # self.cursor.execute("SELECT * FROM users WHERE id=?", (user_id,))
+            # existing_user = self.cursor.fetchone()
 
-            if existing_user is None:
-                self.db.insert_user(user_id, message.from_user.first_name, message.from_user.username)
-                await self.bot.send_message(message.chat.id, f"Вы вошли в систему под идентификатором {user_id}.")
-            else:
-                await self.bot.send_message(message.chat.id, f"Вы уже вошли в систему под идентификатором {user_id}.")
+            # if existing_user is None:
+            #     self.db.insert_user(user_id, message.from_user.first_name, message.from_user.username)
+            #     await self.bot.send_message(message.chat.id, f"Вы вошли в систему под идентификатором {user_id}.")
+            # else:
+            #     await self.bot.send_message(message.chat.id, f"Вы уже вошли в систему под идентификатором {user_id}.")
             
-            # Отправка клавиатуры с категориями пользователю, если он уже залогинен
-            if user_id in self.logged_in_users:
-                await self.bot.send_message(message.chat.id, "Выберите категорию:", reply_markup=self.categories.menu_keyboard_with_subcategories())
+            # # Отправка клавиатуры с категориями пользователю, если он уже залогинен
+            # if user_id in self.logged_in_users:
+            #     await self.bot.send_message(message.chat.id, "Выберите категорию:", reply_markup=self.categories.menu_keyboard_with_subcategories())
 
         @self.dp.callback_query_handler(lambda query: query.data == 'category_roadmaps')
         async def process_callback_roadmap(callback_query: types.CallbackQuery):
